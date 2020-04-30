@@ -71,21 +71,12 @@ Document minimlDoc = new Document(pathToMiniML);
 Creation of new node:<br/>
 ```Java
 Document#createNode(/*Name (String)*/, /*Parent (Node)*/) // Creates a new node and returns it (Node)
-```
-```Java
 Document#getRoot() // Returns the root of the document (Node)
-```
-```Java
 Node#getChildren() // Returns a copy of the node's children (List<Node>)
+Node#getChildrenByName(/*Name (String*/) // Returns a copy of all children of the node with the name given (List<Node>)
+Node#getValues() // Returns a copy of the values of this node (List<String>)
+Node#addValue(/*New value (String)*/) // Adds a new value to the node (void)
+Node#removeValue(/*Value (String)*/) // Removes the given value (void)
+Node#removeChild(/*Child (Node)*/) // Removes the given child (void)
+Node#removeChildrenByName(/*Name (String)*/) // Removes all children with the given name (void)
 ```
-```Java
-Node#getChildrenByName(/*Name (String*/) // Returns a copy of all children of the node with the name given (List<Node>)```<br/>
-```Java
-Node#getValues() // Returns a copy of the values of this node (List<String>)```<br/>
-```Java
-Node#addValue(/*New value (String)*/) // Adds a new value to the node (void)```<br/>
-```Java
-Node#removeValue(/*Value (String)*/) // Removes the given value (void)```<br/>
-```Java
-Node#removeChild(/*Child (Node)*/) // Removes the given child (void)```<br/>
-```Java Node#removeChildrenByName(/*Name (String)*/) // Removes all children with the given name (void)```<br/>
