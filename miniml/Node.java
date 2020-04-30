@@ -112,11 +112,7 @@ public class Node {
 	 * @param name The name of the children to be removed.
 	 */
 	public void removeChildrenByName(String name) {
-		for (Node child : children) {
-			if (child.name.contentEquals(name)) {
-				children.remove(child);
-			}
-		}
+		children.removeIf(child -> child.name.contentEquals(name));
 		parentDoc.update();
 	}
 	
@@ -159,11 +155,11 @@ public class Node {
 	 */
 	public List<Node> getChildrenByName(String name) {
 		List<Node> sameName = new ArrayList<>();
-		for (Node child : children) {
+		children.forEach(child -> {
 			if (child.name.contentEquals(name)) {
 				sameName.add(child);
 			}
-		}
+		});
 		return sameName;
 	}
 	
@@ -201,17 +197,13 @@ public class Node {
 			.append(lineSep);
 		
 		// Append values
-		for (String value : values) {
-			res.append("\t".repeat(indent + 1))
+		values.forEach(value -> res.append("\t".repeat(indent + 1))
 				.append(Document.VALUE_PREFIX)
 				.append(value)
-				.append(lineSep);
-		}
+				.append(lineSep));
 		
 		// Append children
-		for (Node child : children) {
-			res.append(child.asString(indent + 1));
-		}
+		children.forEach(child -> res.append(child.asString(indent + 1)));
 		
 		// Append end
 		res.append("\t".repeat(indent)).append(Document.NODE_END).append(lineSep);
