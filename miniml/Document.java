@@ -131,7 +131,7 @@ public class Document {
 					if (nodeStack.peek().getId() != null) {
 						throw new RepeatingIdException("The node \"" + nodeStack.peek().getName() + "\" has more than one ID. Second Id found on line " + lineNumber);
 					}
-					nodeStack.peek().setId(id);
+					nodeStack.peek().setIdNoUpdate(id);
 					ids.add(id);
 				// Root
 				} else if (nodeStack.isEmpty()) {
