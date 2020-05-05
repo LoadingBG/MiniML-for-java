@@ -34,6 +34,10 @@ public class Node {
 	 * This node's values.
 	 */
 	final List<String> values;
+	/**
+	 * This node's ID, can be null.
+	 */
+	private String id;
 	
 	/**
 	 * Creates the node.
@@ -147,6 +151,15 @@ public class Node {
 	}
 	
 	/**
+	 * Returns this node's id.
+	 * 
+	 * @return This node's id.
+	 */
+	public String getId() {
+		return id;
+	}
+	
+	/**
 	 * Returns all children of this node 
 	 * with the same name as the given one.
 	 * 
@@ -196,6 +209,13 @@ public class Node {
 			.append(name)
 			.append(lineSep);
 		
+		// Append ID
+		res.append("\t".repeat(indent + 1))
+			.append('\'')
+			.append(id)
+			.append('\'')
+			.append(lineSep);
+		
 		// Append values
 		values.forEach(value -> res.append("\t".repeat(indent + 1))
 				.append(Document.VALUE_PREFIX)
@@ -209,5 +229,44 @@ public class Node {
 		res.append("\t".repeat(indent)).append(Document.NODE_END).append(lineSep);
 		
 		return res.toString();
+	}
+	
+	/**
+	 * Checks if a child has the given ID.
+	 * 
+	 * @param id The ID to check.
+	 * @return The node having the ID wanted.
+	 */
+	Node checkForId(String id) {
+		if (this.id.contentEquals(id)) {
+			return this;
+		}
+		
+		for (Node child : children) {
+			Node result = child.checkForId(id);
+			if (result != null) {
+				return result;
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Sets the ID without updating the parent document.
+	 * 
+	 * @param newId The new ID.
+	 */
+	void setIdNoUpdate(String newId) {
+		id = newId;
+	}
+	/**
+	 * Sets the ID of the node.
+	 * 
+	 * @param newId The new ID.
+	 */
+	public void setId(String newId) {
+		id = newId;
+		parentDoc.update();
 	}
 }
