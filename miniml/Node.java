@@ -238,7 +238,7 @@ public class Node {
 	 * @return The node having the ID wanted.
 	 */
 	Node checkForId(String id) {
-		if (this.id.contentEquals(id)) {
+		if (this.id != null && id.contentEquals(this.id)) {
 			return this;
 		}
 		
