@@ -55,7 +55,18 @@ root
   __end__
 __end__ // This is a comment because "__end__" will end the "root" node and the rest of the line will be skipped
 ```
-
+### IDs
+IDs are introduced in v1.1. IDs can be used for aesier access to a given node:
+```
+root
+  'root id'
+  child
+    // IDs with "'" are ok, everyting between the first and the last ' is a part of the ID
+    '''
+    =value
+  __end__
+__end__
+```
 ## Usage
 ### Initialization
 ```Java
@@ -66,17 +77,4 @@ or
 ```Java
 String pathToMiniML = "path/to/doc.mnml";
 Document minimlDoc = new Document(pathToMiniML);
-```
-### Method overview
-Creation of new node:<br/>
-```Java
-Document#createNode(/*Name (String)*/, /*Parent (Node)*/) // Creates a new node and returns it (Node)
-Document#getRoot() // Returns the root of the document (Node)
-Node#getChildren() // Returns a copy of the node's children (List<Node>)
-Node#getChildrenByName(/*Name (String*/) // Returns a copy of all children of the node with the name given (List<Node>)
-Node#getValues() // Returns a copy of the values of this node (List<String>)
-Node#addValue(/*New value (String)*/) // Adds a new value to the node (void)
-Node#removeValue(/*Value (String)*/) // Removes the given value (void)
-Node#removeChild(/*Child (Node)*/) // Removes the given child (void)
-Node#removeChildrenByName(/*Name (String)*/) // Removes all children with the given name (void)
 ```
