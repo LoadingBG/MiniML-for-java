@@ -7,7 +7,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.EmptyStackException;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Document {
 	/**
@@ -96,13 +98,15 @@ public class Document {
 		
 		try (Scanner sc = new Scanner(new FileInputStream(file))) {
 			Stack<Node> nodeStack = new Stack<>();
+			Set<String> ids = new HashSet<>();
 			
 			while (sc.hasNextLine()) {
 				line = sc.nextLine().trim();
 				++lineNumber;
 				
 				// Skip comments and values outside of the root node
-				if (line.startsWith(COMMENT_PREFIX) 
+				if (line.contentEquals("") 
+						|| line.startsWith(COMMENT_PREFIX) 
 						|| (line.startsWith(VALUE_PREFIX) && nodeStack.isEmpty())) {
 					continue;
 				}
@@ -112,14 +116,28 @@ public class Document {
 					throw new IllegalStateException("A second root was found on line " + lineNumber + ".");
 				}
 				
-				// Parse line
+				// End of node
 				if (line.startsWith(NODE_END)) {
 					nodeStack.pop();
+				// Value
 				} else if (line.startsWith(VALUE_PREFIX)) {
 					nodeStack.peek().values.add(line.substring(VALUE_PREFIX.length()));
+				// ID
+				} else if (line.startsWith("'")) {
+					String id = line.substring(1, line.lastIndexOf('\''));
+					if (ids.contains(id)) {
+						throw new RepeatingIdException("Repeating ID found on line " + lineNumber);
+					}
+					if (nodeStack.peek().getId() != null) {
+						throw new RepeatingIdException("The node \"" + nodeStack.peek().getName() + "\" has more than one ID. Second Id found on line " + lineNumber);
+					}
+					nodeStack.peek().setId(id);
+					ids.add(id);
+				// Root
 				} else if (nodeStack.isEmpty()) {
 					root = new Node(line, null, this, false);
 					nodeStack.push(root);
+				// Node
 				} else {
 					nodeStack.push(new Node(line, nodeStack.peek(), this, false));
 				}
@@ -167,5 +185,16 @@ public class Document {
 	 */
 	public Node createNode(String name, Node parent) {
 		return new Node(name, parent, this, true);
+	}
+	
+	/**
+	 * Returns the node which has the provided ID 
+	 * or null if there is no node with the ID.
+	 * 
+	 * @param id The ID to search.
+	 * @return The node with whe provided ID.
+	 */
+	public Node getNodeById(String id) {
+		return root.checkForId(id);
 	}
 }
